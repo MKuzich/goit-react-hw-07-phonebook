@@ -1,24 +1,27 @@
 import { useState } from 'react';
 import { Form, Button, Label, Input } from './ContactAddForm.styled';
-import { useContacts } from 'redux/contactsSlice';
-import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import {
+  useGetContactsQuery,
+  useAddContactMutation,
+} from 'redux/contactsSlice';
 
 export const ContactAddForm = () => {
+  const { data } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const { contacts, add } = useContacts();
 
   const handleSubmit = e => {
     e.preventDefault();
     if (
-      contacts.find(contact =>
+      data.find(contact =>
         contact.name.toLowerCase().includes(name.toLowerCase())
       )
     ) {
       return Notify.warning(`${name} is already in contacts`);
     }
-    add({ name: name, number: number, id: nanoid() });
+    addContact({ name: name, phone: number });
     setName('');
     setNumber('');
   };

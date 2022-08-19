@@ -1,18 +1,18 @@
 import React from 'react';
 import { Button, Item } from './Contact.styled';
 import PropTypes from 'prop-types';
-import { useContacts } from 'redux/contactsSlice';
+import { useRemoveContactMutation } from 'redux/contactsSlice';
 
 export const Contact = ({ name, number, id }) => {
-  const { remove } = useContacts();
+  const [removeContact] = useRemoveContactMutation();
 
-  const deleteContact = e => {
-    remove(e.target.id);
+  const handleRemoveContact = e => {
+    removeContact(e.target.id);
   };
   return (
     <Item>
       {name}: {number}
-      <Button type="button" onClick={deleteContact} id={id}>
+      <Button type="button" onClick={handleRemoveContact} id={id}>
         Delete
       </Button>
     </Item>

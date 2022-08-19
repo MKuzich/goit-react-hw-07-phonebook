@@ -1,27 +1,33 @@
 import React from 'react';
 import { List } from './Contacts.styled';
 import { Contact } from '../Contact/Contact';
-import { useContacts } from 'redux/contactsSlice';
+import PropTypes from 'prop-types';
+import { useGetContactsQuery } from 'redux/contactsSlice';
 
-export const Contacts = () => {
-  const { contacts, filter } = useContacts();
+export const Contacts = ({ filter }) => {
+  const { data } = useGetContactsQuery();
 
   return (
     <>
       <List>
-        {contacts.map(contact => {
-          return (
-            contact.name.toLowerCase().includes(filter.toLowerCase()) && (
-              <Contact
-                name={contact.name}
-                number={contact.number}
-                id={contact.id}
-                key={contact.id}
-              />
-            )
-          );
-        })}
+        {data &&
+          data.map(contact => {
+            return (
+              contact.name.toLowerCase().includes(filter.toLowerCase()) && (
+                <Contact
+                  name={contact.name}
+                  number={contact.phone}
+                  id={contact.id}
+                  key={contact.id}
+                />
+              )
+            );
+          })}
       </List>
     </>
   );
+};
+
+Contacts.propTypes = {
+  filter: PropTypes.string,
 };
